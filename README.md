@@ -20,11 +20,10 @@ update `docker-compose.yaml` and deployment yaml with you own docker registry
 
 ### Local Test
 
-./certs/certs.sh
+- create certs `./certs/certs.sh`
+- `make build`
 
 ```go
 flag.StringVar(&tlscert, "tlscert", "certs/webhook-server-tls.crt", "Path to the TLS certificate")
 flag.StringVar(&tlskey, "tlskey", "certs/webhook-server-tls.key", "Path to the TLS key")
 ```
-
-# test-webhook
