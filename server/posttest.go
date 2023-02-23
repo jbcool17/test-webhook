@@ -12,23 +12,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 )
 
-func parsePod(object []byte) (*v1.Pod, error) {
-	var pod v1.Pod
-	if err := json.Unmarshal(object, &pod); err != nil {
-		return nil, err
-	}
-
-	return &pod, nil
-}
-
-func GetFilenameDate() string {
-	// Use layout string for time format.
-	const layout = "01-02-2006-15:4:5.0"
-	// Place now in the string.
-	t := time.Now()
-	return "admissionreview-" + t.Format(layout) + ".txt"
-}
-
+// HANDLE POST
 func postTest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("POST TEST.\n"))
@@ -54,7 +38,7 @@ func postTest(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// OUTPUT JSON TO SCREEN
-		log.Printf(string(prettyJSON.Bytes()))
+		// log.Printf(string(prettyJSON.Bytes()))
 
 		// Parse AdmissionReview
 		var result AdmissionReview
@@ -70,7 +54,7 @@ func postTest(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.Printf("PARSED POD: %v", pod)
+		log.Printf("PARSED POD: %v", pod.ObjectMeta.GenerateName)
 
 		// WRITE FILE TO TMP
 		fileName := GetFilenameDate()
@@ -85,4 +69,22 @@ func postTest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("End of POST")
+}
+
+// HELPERS
+func parsePod(object []byte) (*v1.Pod, error) {
+	var pod v1.Pod
+	if err := json.Unmarshal(object, &pod); err != nil {
+		return nil, err
+	}
+
+	return &pod, nil
+}
+
+func GetFilenameDate() string {
+	// Use layout string for time format.
+	const layout = "01-02-2006-15:4:5.0"
+	// Place now in the string.
+	t := time.Now()
+	return "admissionreview-" + t.Format(layout) + ".txt"
 }

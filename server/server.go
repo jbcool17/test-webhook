@@ -16,7 +16,7 @@ func hello(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte("Hello World.\n"))
 
-	log.Printf("Hello World - ", req)
+	log.Printf("Hello World - %v", req)
 }
 
 func Start() {
@@ -28,7 +28,8 @@ func Start() {
 	flag.Parse()
 
 	http.HandleFunc("/", hello)
-	http.HandleFunc("/post", postTest)
+	http.HandleFunc("/mutate", postTest)
+	http.HandleFunc("/validate", postTest)
 
 	log.Printf("Starting server at port 8443\n")
 
