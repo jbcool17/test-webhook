@@ -1,0 +1,54 @@
+---
+# Source: nri-metadata-injection/templates/cert-manager.yaml
+# Generate a CA Certificate used to sign certificates for the webhook
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: test-webhook-root-cert
+  namespace: test-webhook
+spec:
+  secretName: test-webhook-root-cert
+  duration: 43800h # 5y
+  issuerRef:
+    name: test-webhook-self-signed-issuer
+  commonName: "ca.webhook.test-webhook"
+  isCA: true
+---
+# Source: nri-metadata-injection/templates/cert-manager.yaml
+# Finally, generate a serving certificate for the webhook to use
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: test-webhook-webhook-cert
+  namespace: test-webhook
+spec:
+  secretName: test-webhook-admission
+  duration: 8760h # 1y
+  issuerRef:
+    name: test-webhook-root-issuer
+  dnsNames:
+  - test-webhook
+  - test-webhook.test-webhook
+  - test-webhook.test-webhook.svc
+---
+# Source: nri-metadata-injection/templates/cert-manager.yaml
+# Create a selfsigned Issuer, in order to create a root CA certificate for
+# signing webhook serving certificates
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: test-webhook-self-signed-issuer
+  namespace: test-webhook
+spec:
+  selfSigned: {}
+---
+# Source: nri-metadata-injection/templates/cert-manager.yaml
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: test-webhook-root-issuer
+  namespace: test-webhook
+spec:
+  ca:
+    secretName: test-webhook-root-cert

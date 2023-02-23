@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-pod
+  namespace: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: centos
+  template:
+    metadata:
+      labels:
+        app: centos
+    spec:
+      containers:
+      - image: centos:7
+        imagePullPolicy: IfNotPresent
+        name: centos
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "100m"
+          requests:
+            memory: "500Mi"
+            cpu: "100m"
+        stdin: true
+        tty: true

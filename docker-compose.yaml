@@ -1,0 +1,9 @@
+---
+version: '3'
+
+services:
+  test-webhook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jbcool17/test-webhook:v1.0.0

@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-webhook
+  namespace: test-webhook
+spec:
+  selector:
+    matchLabels:
+      app: test-webhook
+  template:
+    metadata:
+      labels:
+        app: test-webhook
+    spec:
+      containers:
+        - image: jbcool17/test-webhook:v1.0.0
+          imagePullPolicy: Always
+          name: test-webhook
+          volumeMounts:
+            - name: tls
+              mountPath: "/etc/certs"
+          resources:
+            requests: {}
+            limits: {}
+          ports:
+            - containerPort: 8443
+      serviceAccountName: test-webhook
+      volumes:
+        - name: tls
+          secret:
+            secretName: test-webhook-admission

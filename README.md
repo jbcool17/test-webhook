@@ -11,10 +11,11 @@
 - kind
 - helm - cert manager
 
+update `docker-compose.yaml` and deployment yaml with you own docker registry
+
 ### Kind Cluster Test
 
-- ???
-
+- Setup kind cluster, deploy cert-manager, deploy test-webhook, deploy test deployment: `make setup-kind-testing`
 - CLEANUP: `kind delete cluster`
 
 ### Local Test
